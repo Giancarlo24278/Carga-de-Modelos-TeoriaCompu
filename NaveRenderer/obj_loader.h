@@ -88,10 +88,22 @@ inline void assignParts(Mesh& mesh) {
              c=mesh.vertices[t.indices[2]];
         const auto& bounds=components[root(t.indices[0])];
         if(t.object=="Cylinder" || t.object=="Cylinder.001") {
+            Vec3 n=normalized(cross(b-a,c-a));
             if(bounds.hi.y>-1.0f) t.part=Part::UpperCylinders;
             else if(bounds.lo.z<-1.5f) t.part=Part::LeftTurbine;
             else if(bounds.hi.z>1.5f) t.part=Part::RightTurbine;
             else t.part=Part::LowerCylinders;
+            if(t.part==Part::LeftTurbine || t.part==Part::RightTurbine) {
+                // Distancia al eje de la turbina (plano XZ), relativa a su radio.
+                float cx=(bounds.lo.x+bounds.hi.x)*0.5f,cz=(bounds.lo.z+bounds.hi.z)*0.5f;
+                float radius=(bounds.hi.x-bounds.lo.x)*0.5f,far=0.0f;
+                for(Vec3 p:{a,b,c}) far=std::max(far,std::hypot(p.x-cx,p.z-cz));
+                if(far<0.8f*radius) t.part=Part::TurbineCore;          // Disco interior.
+                else if(std::abs(n.y)<0.3f) t.part=Part::TurbineRim;   // Pared exterior.
+            } else if(n.x>0.3f) {
+                // Cono y tapa que apuntan al frente (X positivo): toberas.
+                t.part=Part::Nozzle;
+            }
         } else {
             t.part=Part::Body;
             Vec3 n=normalized(cross(b-a,c-a));

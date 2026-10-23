@@ -11,7 +11,7 @@ class Framebuffer {
 public:
     std::vector<uint32_t> pixels;
     std::vector<float> depth;
-    Color currentColor=SALMON;
+    Color currentColor=ORANGE;
     Framebuffer():pixels(SCREEN_WIDTH*SCREEN_HEIGHT),depth(pixels.size()) {clear();}
     void setColor(Color c) {currentColor=c;}
     void clear() {

@@ -4,7 +4,7 @@ Este proyecto carga `Nave.obj`, obtiene los vertices de cada cara y dibuja los
 triangulos con un rasterizador propio. SDL2 muestra el framebuffer en una ventana.
 El modelo se centra y se ajusta automaticamente al 82% de la pantalla.
 
-![Mi nave renderizada](NaveRenderer/render.png)
+![Mi nave renderizada] ![alt text](image.png)
 
 
 ## Archivos

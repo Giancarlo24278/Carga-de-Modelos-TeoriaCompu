@@ -5,6 +5,8 @@
 #include "geometry.h"
 
 inline constexpr int SCREEN_WIDTH=1000, SCREEN_HEIGHT=750;
+// true = dibuja la nave volteada (la parte de abajo del OBJ queda arriba).
+inline constexpr bool FLIP_UPSIDE_DOWN=true;
 struct ScreenVertex {float x,y,z;};
 
 class Framebuffer {
@@ -74,7 +76,13 @@ inline void render(const Mesh& mesh,Framebuffer& fb,float yaw,float pitch) {
     }
     Vec3 center=(lo+hi)*0.5f;
     std::vector<Vec3> rotated;
-    for(Vec3 p:mesh.vertices) rotated.push_back(rotate(p-center,yaw,pitch));
+    for(Vec3 p:mesh.vertices) {
+        p=p-center;
+        // El OBJ viene de cabeza: giro de 180 grados sobre el eje X (el largo
+        // de la nave). Asi la salidita queda arriba y la nariz sigue al frente.
+        if(FLIP_UPSIDE_DOWN) p={p.x,-p.y,-p.z};
+        rotated.push_back(rotate(p,yaw,pitch));
+    }
     float minX=1e30f,minY=1e30f,maxX=-1e30f,maxY=-1e30f;
     for(const auto& t:mesh.triangles) for(int i:t.indices) {
         Vec3 p=rotated[i];

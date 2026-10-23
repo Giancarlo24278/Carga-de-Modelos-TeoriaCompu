@@ -107,11 +107,21 @@ inline void assignParts(Mesh& mesh) {
         } else {
             t.part=Part::Body;
             Vec3 n=normalized(cross(b-a,c-a));
+            float minX=std::min({a.x,b.x,c.x}),maxX=std::max({a.x,b.x,c.x});
             // CAMBIA ESTA REGLA si quieres otra superficie como ventana.
-            // Interpretacion: bisel superior del frente (extremo X positivo).
-            if(std::min({a.x,b.x,c.x})>1.20f &&
-               std::min({a.y,b.y,c.y})>-0.95f && n.y>0.2f && n.x>0.2f)
+            // El frente (X positivo) es un cubo biselado: visto de frente es
+            // una cuadricula 3x3. Como la nave se dibuja volteada, la fila de
+            // abajo del OBJ (n.y<0) queda arriba en pantalla. Ventana = esa
+            // fila (1 2 3) + la fila del medio (4 5 6); se excluye la otra.
+            if(minX>1.20f && n.x>0.2f && n.y<0.2f)
                 t.part=Part::Window;
+            // Salidita debajo del cuerpo en el OBJ (arriba ya volteada).
+            // Del frente hacia atras: punta teal, anillo gris, caja salmon.
+            else if(std::min({a.y,b.y,c.y})<-1.85f) {
+                if(minX<-1.0f) t.part=Part::RidgeBack;
+                else if(maxX<-0.6f) t.part=Part::RidgeMiddle;
+                else t.part=Part::RidgeFront;
+            }
             // Techo: caras casi horizontales situadas arriba del cuerpo.
             else if(std::min({a.y,b.y,c.y})>-0.60f && n.y>0.8f)
                 t.part=Part::Roof;

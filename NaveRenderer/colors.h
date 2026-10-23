@@ -4,7 +4,8 @@
 
 struct Color { uint8_t r, g, b; };
 enum class Part { Body, LeftTurbine, RightTurbine, TurbineRim, TurbineCore,
-                  LowerCylinders, UpperCylinders, Nozzle, Roof, Window };
+                  LowerCylinders, UpperCylinders, Nozzle, Roof, Window,
+                  RidgeFront, RidgeMiddle, RidgeBack };
 
 // CAMBIA ESTOS RGB (valores de 0 a 255).
 // Colores tomados de la imagen de referencia de la nave.
@@ -30,7 +31,10 @@ inline Color colorForPart(Part part) {
         case Part::UpperCylinders: return ORANGE;      // Capsulas de los motores.
         case Part::Nozzle:         return NOZZLE_GRAY; // Punta y tapa de los cilindros.
         case Part::Roof:           return ORANGE;      // Parte de arriba del cuerpo.
-        case Part::Window:         return DARK_PURPLE; // Vidrio inclinado de la cabina.
+        case Part::Window:         return DARK_PURPLE; // Filas 1-2-3 y 4-5-6 del frente.
+        case Part::RidgeFront:     return TEAL;        // Salidita de arriba: punta.
+        case Part::RidgeMiddle:    return NOZZLE_GRAY; // Salidita de arriba: anillo gris.
+        case Part::RidgeBack:      return ORANGE;      // Salidita de arriba: caja trasera.
     }
     return ORANGE;
 }

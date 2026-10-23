@@ -39,7 +39,14 @@ a exportar, revisalas.
 | `UpperCylinders` | Capsulas de los motores | Naranja rojizo |
 | `Nozzle` | Cono y tapa frontal de los cilindros (toberas) | Gris |
 | `Roof` | Superficies horizontales de arriba | Naranja rojizo |
-| `Window` | Bisel superior del frente, extremo X positivo | Morado oscuro |
+| `Window` | Frente visto como cuadricula 3x3: filas 1-2-3 y 4-5-6 | Morado oscuro |
+| `RidgeFront` | Salidita de arriba: punta delantera | Turquesa |
+| `RidgeMiddle` | Salidita de arriba: anillo intermedio | Gris |
+| `RidgeBack` | Salidita de arriba: caja trasera | Naranja rojizo |
+
+El OBJ viene de cabeza, asi que `render` lo dibuja girado 180 grados sobre el eje X
+(`FLIP_UPSIDE_DOWN` en `renderer.h`). Las reglas de `assignParts` usan las
+coordenadas originales del OBJ, por eso la ventana usa las caras con `n.y < 0`.
 
 La identificacion del vidrio es una interpretacion visual del modelo, no una
 etiqueta de Blender. Si te referias a otra zona, cambia la regla comentada

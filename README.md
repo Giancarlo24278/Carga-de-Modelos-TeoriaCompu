@@ -6,9 +6,6 @@ El modelo se centra y se ajusta automaticamente al 82% de la pantalla.
 
 ![Mi nave renderizada](NaveRenderer/render.png)
 
-Imagen generada por este mismo rasterizador en C++. Los colores imitan la nave
-de referencia: casco naranja rojizo, borde de turbinas turquesa, interior de
-turbinas oscuro, toberas grises y cabina morado oscuro.
 
 ## Archivos
 
@@ -19,14 +16,6 @@ turbinas oscuro, toberas grises y cabina morado oscuro.
 - `colors.h`: colores editables y excepciones por cara.
 - `Nave.obj`: copia del modelo original, sin modificar su geometria.
 - `ppm_a_png.py`: convierte la imagen del programa a PNG sin instalar paquetes.
-
-## Colores y partes
-
-El OBJ tiene los nombres `Cylinder`, `Cylinder.001` y `Cube`. No tiene nombres
-especificos para el vidrio y el techo, ni materiales que los distingan.
-`assignParts` separa componentes conectados y clasifica superficies por posicion
-y orientacion. Estas reglas se ajustaron a ESTE archivo; si lo editas o lo vuelves
-a exportar, revisalas.
 
 | Nombre en el codigo | Parte asignada | Color inicial |
 |---|---|---|
@@ -43,15 +32,6 @@ a exportar, revisalas.
 | `RidgeFront` | Salidita de arriba: punta delantera | Turquesa |
 | `RidgeMiddle` | Salidita de arriba: anillo intermedio | Gris |
 | `RidgeBack` | Salidita de arriba: caja trasera | Naranja rojizo |
-
-El OBJ viene de cabeza, asi que `render` lo dibuja girado 180 grados sobre el eje X
-(`FLIP_UPSIDE_DOWN` en `renderer.h`). Las reglas de `assignParts` usan las
-coordenadas originales del OBJ, por eso la ventana usa las caras con `n.y < 0`.
-
-La identificacion del vidrio es una interpretacion visual del modelo, no una
-etiqueta de Blender. Si te referias a otra zona, cambia la regla comentada
-en `assignParts` o asigna colores directamente a sus caras.
-El fondo de la ventana de SDL tambien es negro puro.
 
 
 ## Como funciona el dibujo
@@ -115,48 +95,6 @@ En Linux, con SDL2 y `pkg-config` disponibles, tambien puedes compilar directame
 g++ -std=c++17 main.cpp -o nave $(pkg-config --cflags --libs sdl2)
 ./nave Nave.obj
 ```
-
-No se necesita GLM en esta version: `geometry.h` contiene las operaciones pequenas
-de vectores utilizadas. Tampoco se necesita cargar el MTL: los colores estan en C++.
-
-## Controles y PNG para tu entrega
-
-- Flechas: girar la nave.
-- R: volver a la vista inicial.
-- S: guardar `render.ppm` en la carpeta desde la que ejecutaste el programa.
-- Esc: salir.
-
-Despues de presionar S, convierte la imagen con Python:
-
-```text
-python ppm_a_png.py render.ppm render.png
-```
-
-Sube `render.png` junto con el codigo y el OBJ a tu repositorio, y actualiza el
-enlace de la imagen del README. PPM es solo el formato intermedio; la entrega pide PNG o JPG.
-
-Para cambiar la vista inicial, edita `yaw` y `pitch` en `main.cpp`. Para cambiar el
-tamano en pantalla, edita el factor `0.82f` en `renderer.h`.
-
-## Alternativa sin ventana ni SDL
-
-Con un compilador C++17 puedes ejecutar el mismo rasterizador y exportar su imagen:
-
-```text
-cmake -S . -B build-headless -DHEADLESS=ON
-cmake --build build-headless --config Release
-```
-
-En Windows con Visual Studio:
-
-```text
-.\build-headless\Release\nave.exe Nave.obj render.ppm
-python ppm_a_png.py render.ppm render.png
-```
-
-En Linux tambien sirve `g++ -std=c++17 -DHEADLESS main.cpp -o nave` y luego
-`./nave Nave.obj render.ppm`. Para el ejercicio que muestra una ventana SDL,
-usa la version con ventana.
 
 ## Verificacion realizada
 
